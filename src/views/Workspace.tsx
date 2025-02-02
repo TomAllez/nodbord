@@ -1,8 +1,13 @@
+import { Connection } from 'components/connection'
+import { OperationNode } from 'components/nodes/operation'
+import { ToolBar } from 'components/toolbar'
 import { useEffect, useState } from 'react'
 
-export function WorkSpace({ children }: { children: JSX.Element }) {
+export function WorkSpace() {
   const [dots, setDots] = useState<{ x: number; y: number }[]>([])
   const dotSpacing = 30
+
+  const [nodes, setNodes] = useState<JSX.Element[]>([])
 
   useEffect(() => {
     const generateDots = () => {
@@ -32,23 +37,27 @@ export function WorkSpace({ children }: { children: JSX.Element }) {
   }, [])
 
   return (
-    <div className="w-screen h-screen p-6">
-      <div className="relative overflow-hidden w-full h-full">
-        {dots.map((dot, index) => (
-          <div
-            key={index}
-            className="absolute bg-gray-600 rounded-full"
-            style={{
-              width: '3px',
-              height: '3px',
-              left: `${dot.x}px`,
-              top: `${dot.y}px`,
-              transform: 'translate(-50%, -50%)'
-            }}
-          />
-        ))}
-        {children}
+    <>
+      <ToolBar nodes={nodes} setNodes={setNodes} />
+      <div className="relative w-screen h-screen p-6">
+        <div className="relative overflow-hidden w-full h-full">
+          {dots.map((dot, index) => (
+            <div
+              key={index}
+              className="absolute bg-gray-600 rounded-full"
+              style={{
+                width: '3px',
+                height: '3px',
+                left: `${dot.x}px`,
+                top: `${dot.y}px`,
+                transform: 'translate(-50%, -50%)'
+              }}
+            />
+          ))}
+          {nodes}
+          <Connection input={{ x: 1, y: 2 }} output={{ x: 1, y: 2 }} />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
